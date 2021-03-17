@@ -27,11 +27,13 @@ h1 {
     cursor: pointer;
 }
 
-#game-container div.X {
+#game-container div.X::after {
+    content: "X";
     color: green;
 }
 
-#game-container > div.O {
+#game-container div.O::after {
+    content: "O";
     color: red;
 }
 

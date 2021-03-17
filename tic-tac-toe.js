@@ -1,5 +1,3 @@
-// separation of concerns for DOM - create all of DOM in JS?
-
 const gameBoard = (() => {
     const board = Array(9).fill(0);
 
@@ -12,8 +10,8 @@ const gameBoard = (() => {
         console.log("-------------");
     };
 
-    const drawBoard = () => {
-
+    const updateBoard = (boardDiv) => {
+        board.forEach((cell, i) => { boardDiv.children[i].className = " XO"[cell] });
     }
 
     const setCell = (cell, value) => {
@@ -24,11 +22,15 @@ const gameBoard = (() => {
     const getLength = () => board.length; 
     const getBoard = () => board;
 
-    return { drawTextBoard, setCell, getCell, getLength, getBoard }
+    return { drawTextBoard, setCell, getCell, getLength, getBoard, updateBoard }
 })();
 
 const game = (() => {
     const moves = [];
+    let paused = false;
+
+    const setPaused = (state) => paused = state;
+    const getPaused = () => paused; 
 
     // Regex for isWin condition, see https://stackoverflow.com/a/65979060/15011558
     const isWin = () => /^(?:...)*([12])\1\1|^.?.?([12])..\2..\2|^([12])...\3...\3|^..([12]).\4.\4/.test(gameBoard.getBoard().join(""));
@@ -47,23 +49,22 @@ const game = (() => {
 
     const getMoves = () => moves.length
     
-    return { play, getMoves, turn, isWin, isDraw, isPlayable }
+    return { play, getMoves, turn, isWin, isDraw, isPlayable, setPaused, getPaused }
 })();
 
 const Player = (name, playerType) => {
     const getName = () => name; 
     let move = 0; 
     
-    function humanMove() {
+    function humanMove(move) {
         if (!game.isPlayable()) return false; 
-        move = parseInt(prompt("Enter a grid position, " + name, 1));
-        game.play(move);
+        return game.play(move);
     }
 
     function computerMove() {
         if (!game.isPlayable()) return false;
         move = Math.floor(Math.random() * 9) + 1
-        game.play(move);
+        return game.play(move);
     }
 
     const isHuman = () => (playerType == "Human") ? true : false;
@@ -72,22 +73,41 @@ const Player = (name, playerType) => {
 }
 
 (function main() {
-    const playerOne = Player('Ben', "Bot");
+    const boardDiv = document.querySelector("#game-container");
+    const playerOne = Player('Ben', "Human");
     const playerTwo = Player('Robot', "Bot");
 
-    gameBoard.drawTextBoard();
-    simulateGame();
+    boardDiv.addEventListener("click", (e) => {
+        let move = Array.prototype.indexOf.call(e.target.parentNode.children, e.target) + 1;
+        let round = 0;
 
-    function simulateGame() {
-        while (game.isPlayable()) {
-            if (!(game.turn() % 2) == 0) {
-                console.log("Player 1");
-                playerOne.isHuman() ? playerOne.humanMove() : playerOne.computerMove();
-            } else {
-                console.log("Player 2");
-                playerTwo.isHuman() ? playerTwo.humanMove() : playerTwo.computerMove();
+        while (round < 2 && game.isPlayable()) {
+            while(game.getPaused() == false) {
+                if (!(game.turn() % 2) == 0) {
+                    console.log("Player 1");
+                    if (playValidMove(playerOne, move)) round++;
+                    gameBoard.updateBoard(boardDiv);
+                } else {
+                    console.log("Player 2");
+                    if (playValidMove(playerTwo, move)) round++;
+
+                    game.setPaused(true);
+                    setTimeout(() => {
+                        game.setPaused(false);
+                        gameBoard.updateBoard(boardDiv);
+                    }, 500); 
+                }
             }
         }
+    });
+
+    function playValidMove(player, move) {
+        if (player.isHuman()) {
+            return player.humanMove(move);
+        } else { 
+            return player.computerMove();
+        };
     }
+
 })()
 
