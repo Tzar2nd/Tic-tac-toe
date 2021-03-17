@@ -1,0 +1,46 @@
+:root {
+    --border: .5rem solid #393939;
+    --symbol-color: #FF7F5B;
+  }
+
+html {
+    font: 16pt Helvetica;
+}
+
+body {
+
+}
+
+h1 {
+    text-align: center;
+}
+
+#game-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-content: center;
+}
+
+#game-container > div {
+    background-color: silver;
+    padding: 1.8rem 2rem;
+    cursor: pointer;
+}
+
+#game-container div.X {
+    color: green;
+}
+
+#game-container > div.O {
+    color: red;
+}
+
+#game-container > div:nth-child(-n+6) {
+    border-bottom: var(--border);
+  }
+
+#game-container > div:nth-child(3n-1) {
+    border-right: var(--border);
+    border-left: var(--border);
+  }
+  
