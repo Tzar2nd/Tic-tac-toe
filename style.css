@@ -11,8 +11,22 @@ body {
 
 }
 
+.inactive {
+    background-color: silver;
+}
+
 h1 {
     text-align: center;
+}
+
+h3 {
+    text-align: center;
+}
+
+#display-container {
+    display: flex;
+    justify-content: center;
+    
 }
 
 #game-container {
@@ -22,19 +36,23 @@ h1 {
 }
 
 #game-container > div {
-    background-color: silver;
-    padding: 1.8rem 2rem;
-    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;    
 }
 
 #game-container div.X::after {
     content: "X";
     color: green;
+    margin: auto;
 }
 
 #game-container div.O::after {
     content: "O";
     color: red;
+    margin: auto;
 }
 
 #game-container > div:nth-child(-n+6) {
@@ -45,4 +63,27 @@ h1 {
     border-right: var(--border);
     border-left: var(--border);
   }
+
+#player-one {
+    margin-right: 5rem;
+}
+
+#player-two {
+    margin-left: 5rem;
+}
+
+.button {
+    outline: none;
+    border: none;
+    width: 75px;
+    height: 50px;
+    margin-left: 50%;
+    margin-right: 50%;
+    transition-duration: 0.2s;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color:rgb(255, 255, 100);  /* Green */
+}
   
