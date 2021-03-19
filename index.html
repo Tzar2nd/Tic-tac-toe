@@ -8,7 +8,10 @@
 <body>
     <h1>Tic-tac-toe</h1> 
     <div id="display-container">
-        <div id='player-one'>Player One<br><br>Carla</div>
+        <div class='player1-container'>
+            <div id='player-one'>Player One</div>
+            <div><img id='player-one-image' class='player-img glowing' src='/images/player.svg'></div>
+        </div>
         <div id="game-container">
             <div></div>
             <div></div>
@@ -20,10 +23,17 @@
             <div></div>
             <div></div>
         </div>
-        <div id='player-two'>Player Two<br><br>Robot-Ben</div>
+        <div class='player2-container'>
+            <div id='player-two'>Player Two</div>
+            <div><img id='player-two-image' class='player-img' src='/images/robot.svg'></div>
+        </div>
     </div>
+    <div class='messages'>
         <h3 id="message"></h3>
-        <button class='button' id='reset-button'>Replay</button>
+        <button class='button hidden' id='reset-button'>Replay</button>
+    </div>
+    <p>Developed by Ben Smith as part of the Odin Project.</p> 
+    <p>My Github repo is located at: <a href='https://github.com/Tzar2nd/Tic-tac-toe'>Github Repo</a></p>
 
 </body>
 

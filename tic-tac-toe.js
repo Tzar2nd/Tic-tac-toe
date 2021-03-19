@@ -45,7 +45,7 @@ const game = (() => {
     const getgameStatus = (player) => {
         if (isWin()) {
             let winner = turn() % 2 + 1;
-            return `${player.getName()} wins!`;
+            return `Player ${winner} wins!`;
         }
         if (isDraw()) return `It's a draw`;
         if (isPlayable()) return ``;
@@ -100,16 +100,33 @@ const DOM = (() => {
     const message = document.querySelector("#message");
     const gameDiv = document.querySelector("#game-container");
     const resetButton = document.querySelector("#reset-button")
+    const playerOneImage = document.querySelector("#player-one-image");
+    const playerTwoImage = document.querySelector("#player-two-image");
 
     const getBoardDiv = () => boardDiv;
     const getMessage = () => message;
     const getResetButton = () => resetButton;
     const updategameStatus = (player) => {
-        message.innerHTML = game.getgameStatus(player);
+        if (game.turn() == 1) {
+            playerOneImage.classList.add('glowing');
+            playerTwoImage.classList.remove('glowing');
+        } else {
+            playerTwoImage.classList.add('glowing');
+            playerOneImage.classList.remove('glowing');
+        }
+
         if (!game.isPlayable()) { 
             gameDiv.classList.add('inactive');
         } else {
             gameDiv.classList.remove('inactive');
+        }
+
+        if (game.isWin() || game.isDraw()) {
+            playerOneImage.classList.remove('glowing');
+            playerTwoImage.classList.remove('glowing');
+            resetButton.classList.remove('hideButton');
+            resetButton.classList.add('showButton');
+
         }
     }
 
@@ -125,6 +142,8 @@ const DOM = (() => {
         board.forEach((cell, i) => { 
             boardDiv.children[i].className = "";
         });
+        resetButton.classList.remove('showButton');
+        resetButton.classList.add('hideButton');
     }
 
     return { getBoardDiv, getMessage, updategameStatus, updateBoard, resetBoard,
