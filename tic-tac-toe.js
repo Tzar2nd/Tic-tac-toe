@@ -107,6 +107,8 @@ const DOM = (() => {
     const getMessage = () => message;
     const getResetButton = () => resetButton;
     const updategameStatus = (player) => {
+        message.innerHTML = game.getgameStatus(player);
+        
         if (game.turn() == 1) {
             playerOneImage.classList.add('glowing');
             playerTwoImage.classList.remove('glowing');
